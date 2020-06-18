@@ -1,4 +1,4 @@
-C-UART Interface Example
+ColugoBroker
 ========================
 
 This is a simple MAVLink to UART interface example for *nix systems that can allow communication between Pixhawk and an offboard computer.
@@ -10,7 +10,7 @@ Building
 ========
 
 ```
-$ cd c_uart_interface_example/
+$ cd ColugoBroker/
 $ make
 ```
 
@@ -29,8 +29,7 @@ Execution
 You have to pick a port name, try searching for it with 
 ```
 
-$ ls /dev/ttyACM* 
-$ ls /dev/ttyUSB*
+$ ls /dev/ttyTHS2
 ```
 
 Alternatively, plug in Pixhawk USB cable again and issue the command:
@@ -45,8 +44,8 @@ The Pixhawk USB port will show up on a `ttyACM*`, an FTDI cable will show up on 
 Run the example executable on the host shell:
 
 ```
-$ cd c_uart_interface_example/
-$ ./mavlink_control -d /dev/ttyACM0
+$ cd ColugoBroker/
+$ ./mavlink_control -d /dev/ttyTHS2
 ```
 
 To stop the program, use the key sequence `Ctrl-C`.

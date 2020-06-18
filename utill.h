@@ -1,8 +1,5 @@
 #ifndef UTILL_H_
 #define UTILL_H_
-#include <iostream>
-using namespace std ;
-
 
 #define DEBUG
 

@@ -33,7 +33,7 @@
  * POSSIBILITY OF SUCH DAMAGE.
  *
  ****************************************************************************/
-
+     
 /**
  * @file autopilot_interface.cpp
  *
@@ -46,7 +46,7 @@
  * @author Lorenz Meier,   <lm@inf.ethz.ch>
  *
  */
-
+  
 
 // ------------------------------------------------------------------------------
 //   Includes
@@ -180,7 +180,7 @@ set_yaw_rate(float yaw_rate, mavlink_set_position_target_local_ned_t &sp)
 
 
 // ----------------------------------------------------------------------------------
-//   Autopilot Interface Class
+//   Autopilot Interface Class 
 // ----------------------------------------------------------------------------------
 
 // ------------------------------------------------------------------------------
@@ -584,7 +584,7 @@ disable_offboard_control()
 	} // end: if offboard_status
 
 }
-
+ 
 // ------------------------------------------------------------------------------
 //   Arm
 // ------------------------------------------------------------------------------
@@ -662,7 +662,7 @@ Autopilot_Interface::
 start()
 {
 	int result;
-
+ 
 	// --------------------------------------------------------------------------
 	//   CHECK PORT
 	// --------------------------------------------------------------------------
@@ -676,7 +676,7 @@ start()
 		throw 1;
 	}
 
-
+  
 	// --------------------------------------------------------------------------
 	//   READ THREAD
 
@@ -982,7 +982,7 @@ write_thread(void)
 	current_setpoint = sp;
 
 	// write a message and signal writing
-	write_setpoint();
+	//write_setpoint();
 	writing_status = true;
 
 	// Pixhawk needs to see off-board commands at minimum 2Hz,
@@ -990,7 +990,7 @@ write_thread(void)
 	while ( !time_to_exit )
 	{
 		usleep(250000);   // Stream at 4Hz
-		write_setpoint();
+		//write_setpoint();
 	}
 
 	// signal end

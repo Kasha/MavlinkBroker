@@ -1,4 +1,4 @@
-C-UART Interface Example
+ColugoBroker
 ========================
 
 This is a simple MAVLink to UART interface example for *nix systems that can allow communication between Pixhawk and an offboard computer.
@@ -10,7 +10,7 @@ Building
 ========
 
 ```
-$ cd c_uart_interface_example/
+$ cd ColugoBroker/
 $ make
 ```
 

@@ -1,0 +1,22 @@
+[Launch]
+Launch Configurations=Launch Configuration 0
+
+[Launch][Launch Configuration 0]
+Configured Launch Modes=execute
+Configured Launchers=scriptAppLauncher
+Name=RunColugoBroker
+Type=Script Application
+
+[Launch][Launch Configuration 0][Data]
+Arguments=
+EnvironmentGroup=default
+Executable=file:///home/nvidia/Public/ColugoBroker/ColugoMavlink.rtf
+Execute on Remote Host=false
+Interpreter=bash
+Output Filtering Mode=0
+Remote Host=
+Run current file=false
+Working Directory=file:///home/nvidia/Public/ColugoBroker
+
+[Project]
+VersionControlSupport=kdevgit

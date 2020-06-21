@@ -71,7 +71,7 @@
 // ----------------------------------------------------------------------------------
 /*
  * Generic Port Class
- *
+ *lock
  * This is an abstract port definition to handle both serial and UDP ports.
  */
 class Generic_Port

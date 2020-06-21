@@ -62,8 +62,11 @@
 #include <sys/time.h>
 #include <pthread.h> // This uses POSIX Threads
 #include <unistd.h>  // UNIX standard function definitions
+#include <queue>
+#include <memory>
+#include <utill.h>
 #include <ardupilotmega/mavlink.h>
-#include "ColugoCompanionComputer.h"
+//#include <colugo_companion_computer.h>
 // ------------------------------------------------------------------------------
 //   Defines
 // ------------------------------------------------------------------------------
@@ -282,7 +285,9 @@ public:
 private:
 
 	Generic_Port *port;
-    Upperlink<vector<string>> uplink ;
+    //queue <string> m_olink
+   //UpperlinkData uplink_data ;
+    //DownlinkData downlink_data ;
     //queue <shared_ptr<char>> uplink; //Listens to commands for Flight controller
    // queue <shared_ptr<char>> downlink; //Sends commands from Flight controller to GCS or Companion Computer
     

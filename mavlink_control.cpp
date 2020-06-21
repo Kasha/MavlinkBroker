@@ -54,10 +54,11 @@
 // ------------------------------------------------------------------------------
 
 #include "mavlink_control.h"
-#include "utill.h"
+
 // ------------------------------------------------------------------------------
 //   TOP
 // ------------------------------------------------------------------------------
+
 int
 top (int argc, char **argv)
 {
@@ -141,6 +142,23 @@ top (int argc, char **argv)
 	port->start();
 	autopilot_interface.start();
 
+    // --------------------------------------------------------------------------
+	//   START OFFBOARD MODE
+	// --------------------------------------------------------------------------
+    //Use Guided Mode and the commands can be issued via Mavlink from an external source, such as a companion computer.
+	autopilot_interface.enable_offboard_control();
+	usleep(100); // give some time to let it sink in
+
+	
+
+	// --------------------------------------------------------------------------
+	//   STOP OFFBOARD MODE
+	// --------------------------------------------------------------------------
+
+	autopilot_interface.disable_offboard_control();
+
+	// now pixhawk isn't listening to setpoint commands
+    
 
 	// --------------------------------------------------------------------------
 	//   RUN COMMANDS
@@ -234,8 +252,7 @@ commands(Autopilot_Interface &api, bool autotakeoff)
 	return;
 
 }
-
-
+ 
 // ------------------------------------------------------------------------------
 //   Parse Command Line
 // ------------------------------------------------------------------------------
@@ -341,25 +358,25 @@ quit_handler( int sig )
     #ifdef DEBUG
     debug_print("\nTERMINATING AT USER REQUEST\n");
     #endif
-	
+	 
 	// autopilot interface  
 	try {
 		autopilot_interface_quit->handle_quit(sig);
-	}
+	} 
 	catch (int error){}
 
 	// port
-	try {
+	try { 
 		port_quit->stop();
 	}
 	catch (int error){}
 
 	// end program here 
 	exit(0);
-
+ 
 }
-     
 
+extern ColugoBrokerManager* ColugoBrokerManager::singleton_ ;
 // ------------------------------------------------------------------------------
 //   Main
 // ------------------------------------------------------------------------------
@@ -368,8 +385,13 @@ main(int argc, char **argv)
 {
 try
 {
+    ColugoBrokerManager* oColugoBrokerManager = ColugoBrokerManager::GetInstance();
+    //debug_print("Main SomeBusinessLogic");
+    oColugoBrokerManager->SomeBusinessLogic() ;
 		//let it sink in
-
+    
+        //ColugoBrokerManager * colugoBrokerManagerST = ColugoBrokerManager::GetInstance("EEC");
+        //singleton->
 		int result = top(argc,argv);
 		return result;
 	}

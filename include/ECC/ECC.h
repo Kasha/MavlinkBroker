@@ -3,13 +3,18 @@
 
 #define ELBIT_MAVLINK_SIZE = 263
 
-namespace ColugoBrokerClass
+#include <ECC_UPLINK_MESSAGE.h>
+
+#include <utill.h>
+
+using namespace std ;
+
+namespace ColugoBrokerModule
 {
-template<typename T>
-class Upperlink 
+class UpperlinkData 
 { 
-private: 
-     queue <vector<T>> m_oUplink; //Listens to commands for Flight controller
+protected: 
+     queue <string> m_olink; //Listens to commands for Flight controller
      //queue <shared_ptr<char>> downlink; //Sends commands from Flight controller to GCS or Companion Computer
      
      /*inline shared_ptr<T> MakeArray(int size)
@@ -17,7 +22,7 @@ private:
         return shared_ptr<T>( new T[size], []( T *p ){ delete [] p; } );
     }*/
 public: 
-     Upperlink(){ }
+     UpperlinkData(){ }
     
      //Upperlink(T &val) delete ;
     
@@ -25,11 +30,38 @@ public:
      
     //~Upperlink(){m_oUplink.reset() ;} ;
   
-    void Push(vector<T> &val)
+    void push(string val)
     {
-        m_oUplink.push(val);
+        m_olink.push(val);
     }
+    
+    string &front()
+    {
+        return m_olink.front();
+    }
+}; 
+
+
+class DownlinkData: public UpperlinkData
+{ 
+private: 
+       /*inline shared_ptr<T> MakeArray(int size)
+    {
+        return shared_ptr<T>( new T[size], []( T *p ){ delete [] p; } );
+    }*/
+public: 
+     DownlinkData(){ }
+    
+     //Upperlink(T &val) delete ;
+    
+    // Upperlink(queue <shared_ptr<T>> &val) delete ;
+     
+    //~Upperlink(){m_oUplink.reset() ;} ;
+  
+
    
+   bool processMessage(mavlink_message_t& message) ;
+   bool pushMessageBufferToQueue(mavlink_message_t& message) ;
   /*  // This operator overloading enables calling 
     // operator function () on objects of increment 
     shared_ptr<T> operator () (char *vUplink) const 
@@ -42,6 +74,7 @@ public:
         return shared_ptr<char>((char *)vUplink); 
     } */
 }; 
+
 
 }
 

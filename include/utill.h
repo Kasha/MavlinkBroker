@@ -1,5 +1,10 @@
-#ifndef UTILL_H_
-#define UTILL_H_
+#ifndef COLUGO_UTILL_H_
+#define COLUGO_UTILL_H_
+
+#include <queue>
+#include <memory>
+#include <string>
+using namespace std ;
 
 #define DEBUG
 
@@ -13,5 +18,8 @@
 #define debug_print(fmt, ...) \
             do { if (DEBUG_TEST) fprintf(stderr, fmt, ## __VA_ARGS__); } while (0)
                 
+
+#include <colugo_broker.h>
+using namespace ColugoBrokerModule ;
 
 #endif

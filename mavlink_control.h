@@ -63,17 +63,11 @@
 #include <signal.h>
 #include <time.h>
 #include <sys/time.h>
-
-using std::string;
-using namespace std;
-
+#include <utill.h>
 #include <ardupilotmega/mavlink.h>
-
 #include "autopilot_interface.h"
 #include "serial_port.h"
 #include "udp_port.h"
-
-//extern bool g_bDebug ;
 
 // ------------------------------------------------------------------------------
 //   Prototypes
@@ -90,6 +84,4 @@ void parse_commandline(int argc, char **argv, char *&uart_name, int &baudrate,
 Autopilot_Interface *autopilot_interface_quit;
 Generic_Port *port_quit;
 void quit_handler( int sig );
-
-extern bool g_bDebug ;
 

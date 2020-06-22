@@ -1,6 +1,0 @@
-#ifndef ELBIT_COMPANION_COMPUTER_UPLINK_MESSAGES
-#define ELBIT_COMPANION_COMPUTER_UPLINK_MESSAGES
-/*
-TODO
-ADD Elbit Extended Messages*/           
-#endif

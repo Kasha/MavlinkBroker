@@ -2,7 +2,8 @@
 #include <ECC.h>
 using namespace ColugoBrokerModule ;
 
-bool DownlinkData::processMessage(mavlink_message_t& message)
+            
+bool DownlinkData::Push(mavlink_message_t& message)
 { 
     /* 
     TODO
@@ -18,7 +19,7 @@ bool DownlinkData::processMessage(mavlink_message_t& message)
     return false ;
 }
 
-bool DownlinkData::pushMessageBufferToQueue(mavlink_message_t& message)
+mavlink_message_t& DownlinkData::Pop()
 {
    /*- // Lock
 	pthread_mutex_lock(&lock);
@@ -32,7 +33,32 @@ bool DownlinkData::pushMessageBufferToQueue(mavlink_message_t& message)
 	// Unlock
 	pthread_mutex_unlock(&lock);
 
-
+mavlink_message_t& message
 	return bytesWritten;*/
-   return true ;
+   
+   mavlink_message_t message ;
+   return message ;
+}
+
+
+bool UpperlinkData::Push(mavlink_message_t& message)
+{ 
+    /* 
+    TODO
+    ADD Elbit Extended Messages Recived Hndler
+    */
+   
+#ifdef DEBUG
+            debug_print("\nUpperlinkData::processMessage::read_messages success\n"); 
+			debug_print("\nUpperlinkData::processMessage message.sysid = %i", message.sysid); 
+			debug_print("\nUpperlinkData::processMessage message.msgid = %i", message.msgid); 
+			debug_print("\nUpperlinkData::processMessage message.compid = %i", message.compid); 
+    #endif
+    return false ;
+}
+
+mavlink_message_t& UpperlinkData::Pop()
+{
+   mavlink_message_t message ;
+   return message ;
 }

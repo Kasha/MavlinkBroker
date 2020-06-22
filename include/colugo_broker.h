@@ -1,9 +1,7 @@
 #ifndef COLUGOBROKER_H
 #define COLUGOBROKER_H
 #include <utill.h>
-#include <ardupilotmega/mavlink.h>
 #include <sys/types.h>
-#include <unistd.h>
 
 namespace ColugoBrokerModule
 {
@@ -21,15 +19,13 @@ class ColugoBrokerManager
      */
     
 protected:
-    ColugoBrokerManager()
-    {
-    }
-    
-
-    static ColugoBrokerManager* singleton_;
+    ColugoBrokerManager() ;
+    ~ColugoBrokerManager() ;
+    static ColugoBrokerManager* singleton_ ;
   
-    queue <mavlink_message_t> uplink_ ;
-    queue <mavlink_message_t> downlink_ ;
+    LinkMessageBase* uplink_ = NULL;
+    LinkMessageBase* downlink_ = NULL ;
+    
 public:
 
     /**
@@ -40,6 +36,9 @@ public:
      * Singletons should not be assignable.
      */
     void operator=(const ColugoBrokerManager &) = delete;
+    
+    static void Delete(){ delete singleton_ ;} ;
+    //Attach
     /**
      * This is the static method that controls the access to the singleton
      * instance. On the first run, it creates a singleton object and places it
@@ -52,7 +51,6 @@ public:
      * @param other TODO
      * @return TODO
      */
-    static ColugoBrokerManager *GetInstance(const string& value);
     static ColugoBrokerManager *GetInstance(); 
     /**
      * Finally, any singleton should define some business logic, which can be
@@ -64,22 +62,28 @@ public:
      * @param other TODO
      * @return TODO
      */
-    void SomeBusinessLogic()
-    {
-          #ifdef DEBUG
-            debug_print("\nSomeBusinessLogic val=%d", getpid());
-          #endif
-    }
-    void read_messages(mavlink_message_t message) ;
- /**
-     * @todo write docs
+      static bool Start() ;
+      static bool Stop() ;
+    /**
+     * @todo forward Mavlink message from Flight controller to companion computer according to filtered and predefined type
      *
      * @param other TODO
      * @return TODO
      */
+    bool DownlinkMessage(mavlink_message_t& message) ;
+    
+    /**
+     * @todo forward Mavlink message from companion computer according to filtered and predefined type to Flight controller
+     *
+     * @param other TODO
+     * @return TODO
+     */
+    void UplinkMessage(mavlink_message_t& message) ;
+ 
     /*string value() const{
         return value_;
     } */
+  
 };
 }
 

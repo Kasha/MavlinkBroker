@@ -187,7 +187,7 @@ set_yaw_rate(float yaw_rate, mavlink_set_position_target_local_ned_t &sp)
 // ------------------------------------------------------------------------------
 Autopilot_Interface::
 Autopilot_Interface(Generic_Port *port_)
-{
+{      
 	// initialize attributes
 	write_count = 0;
 
@@ -199,7 +199,7 @@ Autopilot_Interface(Generic_Port *port_)
 	read_tid  = 0; // read thread id
 	write_tid = 0; // write thread id
 
-	system_id    = 254; // system id
+	system_id    = 0; // system id
 	autopilot_id = 0; // autopilot component id
 	companion_id = 0; // companion computer component id
 
@@ -232,8 +232,7 @@ void Autopilot_Interface::read_messages()
 {
 	bool success;               // receive success flag
 	bool received_all = false;  // receive only one message
-	Time_Stamps this_timestamps;
-
+	Time_Stamps this_timestamps ;
 	// Blocking wait for new data
 	while ( !received_all and !time_to_exit )
 	{
@@ -242,181 +241,162 @@ void Autopilot_Interface::read_messages()
 		// ----------------------------------------------------------------------
 		mavlink_message_t message;
 		success = port->read_message(message);
-
+       
 		// ----------------------------------------------------------------------
 		//   HANDLE MESSAGE
 		// ----------------------------------------------------------------------
 		if( success ) 
 		{    
-            ColugoBrokerManager *oColugoBrokerManager = ColugoBrokerManager::GetInstance();
-            oColugoBrokerManager->SomeBusinessLogic() ;
-          
-            //ColugoBrokerManager* oColugoBrokerManager = ColugoBrokerManager::GetInstance("EEC");
-
-            //colugoBrokerManagerST->read_messages(message);
     #ifdef DEBUG
-            debug_print("\nAutopilot_Interface::read_messages success\n"); 
+            debug_print("\n\nAutopilot_Interface::read_messages success\n"); 
 			debug_print("\nAutopilot_Interface message.sysid = %i", message.sysid); 
 			debug_print("\nAutopilot_Interface message.msgid = %i", message.msgid); 
-			debug_print("\nAutopilot_Interface message.compid = %i", message.compid); 
+			debug_print("\nAutopilot_Interface message.compid = %i\n\n", message.compid); 
     #endif
 		 	
             // Store message sysid and compid.
 			// Note this doesn't handle multiple message sources.
 			current_messages.sysid  = message.sysid;
 			current_messages.compid = message.compid;
-
-
-            //uint8_t buffer[MAVLINK_MAX_PACKET_LEN];
-
-            // check message is write length
-            //unsigned int messageLength = mavlink_msg_to_send_buffer(buffer, &message);
- 
-            //if( downlink_data.processMessage(message) == false )//If false parse it here
+            //Handle Flight Controller received message
+            switch (message.msgid)
             {
-                // Handle Message ID
-                switch (message.msgid)
+
+                case MAVLINK_MSG_ID_HEARTBEAT:
                 {
+                    #ifdef DEBUG
+                        debug_print("\nMAVLINK_MSG_ID_HEARTBEAT=%d", MAVLINK_MSG_ID_HEARTBEAT);
+                    #endif
+                
+                    mavlink_msg_heartbeat_decode(&message, &(current_messages.heartbeat));
+                    current_messages.time_stamps.heartbeat = get_time_usec();
+                    this_timestamps.heartbeat = current_messages.time_stamps.heartbeat;
+                    break;
+                } 
 
-                    case MAVLINK_MSG_ID_HEARTBEAT:
-                    {
-                        #ifdef DEBUG
-                            debug_print("\nMAVLINK_MSG_ID_HEARTBEAT=%d", MAVLINK_MSG_ID_HEARTBEAT);
-                        #endif
+                case MAVLINK_MSG_ID_SYS_STATUS:
+                {
+                    #ifdef DEBUG
+                        debug_print("\nMAVLINK_MSG_ID_SYS_STATUS=%d", MAVLINK_MSG_ID_SYS_STATUS);
+                    #endif
+                    mavlink_msg_sys_status_decode(&message, &(current_messages.sys_status));
+                    current_messages.time_stamps.sys_status = get_time_usec();
+                    this_timestamps.sys_status = current_messages.time_stamps.sys_status;
+                    break;
+                }
+
+                case MAVLINK_MSG_ID_BATTERY_STATUS:
+                {
+                    mavlink_msg_battery_status_decode(&message, &(current_messages.battery_status));
                     
-                        mavlink_msg_heartbeat_decode(&message, &(current_messages.heartbeat));
-                        current_messages.time_stamps.heartbeat = get_time_usec();
-                        this_timestamps.heartbeat = current_messages.time_stamps.heartbeat;
-                        break;
-                    } 
-
-                    case MAVLINK_MSG_ID_SYS_STATUS:
-                    {
-                        #ifdef DEBUG
-                            debug_print("\nMAVLINK_MSG_ID_SYS_STATUS=%d", MAVLINK_MSG_ID_SYS_STATUS);
-                        #endif
-                        mavlink_msg_sys_status_decode(&message, &(current_messages.sys_status));
-                        current_messages.time_stamps.sys_status = get_time_usec();
-                        this_timestamps.sys_status = current_messages.time_stamps.sys_status;
-                        break;
-                    }
-
-                    case MAVLINK_MSG_ID_BATTERY_STATUS:
-                    {
-                        mavlink_msg_battery_status_decode(&message, &(current_messages.battery_status));
+                    #ifdef DEBUG
+                        debug_print("\nMAVLINK_MSG_ID_BATTERY_STATUS current_messages.battery_status.battery_remaining=%d",  current_messages.battery_status.battery_remaining);
+                    #endif
                         
-                        #ifdef DEBUG
-                            debug_print("\nMAVLINK_MSG_ID_BATTERY_STATUS current_messages.battery_status.battery_remaining=%d",  current_messages.battery_status.battery_remaining);
-                        #endif
-                            
-                        current_messages.time_stamps.battery_status = get_time_usec();
-                        this_timestamps.battery_status = current_messages.time_stamps.battery_status;
-                        break;
-                    }
+                    current_messages.time_stamps.battery_status = get_time_usec();
+                    this_timestamps.battery_status = current_messages.time_stamps.battery_status;
+                    break;
+                }
 
-                    case MAVLINK_MSG_ID_RADIO_STATUS:
-                    {
-                        #ifdef DEBUG
-                            debug_print("\nMAVLINK_MSG_ID_RADIO_STATUS=%d", MAVLINK_MSG_ID_RADIO_STATUS);
-                        #endif
-                            
-                        mavlink_msg_radio_status_decode(&message, &(current_messages.radio_status));
-                        current_messages.time_stamps.radio_status = get_time_usec();
-                        this_timestamps.radio_status = current_messages.time_stamps.radio_status;
-                        break;
-                    }
-
-                    case MAVLINK_MSG_ID_LOCAL_POSITION_NED:
-                    {
-                        mavlink_msg_local_position_ned_decode(&message, &(current_messages.local_position_ned));
+                case MAVLINK_MSG_ID_RADIO_STATUS:
+                {
+                    #ifdef DEBUG
+                        debug_print("\nMAVLINK_MSG_ID_RADIO_STATUS=%d", MAVLINK_MSG_ID_RADIO_STATUS);
+                    #endif
                         
-                        #ifdef DEBUG
-                            debug_print("\nMAVLINK_MSG_ID_LOCAL_POSITION_NED current_messages.local_position_ned.x=%lf", current_messages.local_position_ned.x);
-                        #endif
-                        
-                        current_messages.time_stamps.local_position_ned = get_time_usec();
-                        this_timestamps.local_position_ned = current_messages.time_stamps.local_position_ned;
-                        break;
-                    }
+                    mavlink_msg_radio_status_decode(&message, &(current_messages.radio_status));
+                    current_messages.time_stamps.radio_status = get_time_usec();
+                    this_timestamps.radio_status = current_messages.time_stamps.radio_status;
+                    break;
+                }
 
-                    case MAVLINK_MSG_ID_GLOBAL_POSITION_INT:
-                    {
-                        mavlink_msg_global_position_int_decode(&message, &(current_messages.global_position_int));
-                        
-                        #ifdef DEBUG
-                        debug_print("\nMAVLINK_MSG_ID_GLOBAL_POSITION_INT current_messages.global_position_int.vx=%d", current_messages.global_position_int.vx);
-                        #endif
-                            
-                        current_messages.time_stamps.global_position_int = get_time_usec();
-                        this_timestamps.global_position_int = current_messages.time_stamps.global_position_int;
-                        break;
-                    }
-
-                    case MAVLINK_MSG_ID_POSITION_TARGET_LOCAL_NED:
-                    {
-                        mavlink_msg_position_target_local_ned_decode(&message, &(current_messages.position_target_local_ned));
+                case MAVLINK_MSG_ID_LOCAL_POSITION_NED:
+                {
+                    mavlink_msg_local_position_ned_decode(&message, &(current_messages.local_position_ned));
                     
-                        #ifdef DEBUG
-                            debug_print("\nMAVLINK_MSG_ID_POSITION_TARGET_LOCAL_NED current_messages.position_target_local_ned.x=%lf", current_messages.position_target_local_ned.x);
-                        #endif
+                    #ifdef DEBUG
+                        debug_print("\nMAVLINK_MSG_ID_LOCAL_POSITION_NED current_messages.local_position_ned.x=%lf", current_messages.local_position_ned.x);
+                    #endif
+                    
+                    current_messages.time_stamps.local_position_ned = get_time_usec();
+                    this_timestamps.local_position_ned = current_messages.time_stamps.local_position_ned;
+                    break;
+                }
+
+                case MAVLINK_MSG_ID_GLOBAL_POSITION_INT:
+                {
+                    mavlink_msg_global_position_int_decode(&message, &(current_messages.global_position_int));
+                    
+                    #ifdef DEBUG
+                    debug_print("\nMAVLINK_MSG_ID_GLOBAL_POSITION_INT current_messages.global_position_int.vx=%d", current_messages.global_position_int.vx);
+                    #endif
                         
-                        current_messages.time_stamps.position_target_local_ned = get_time_usec();
-                        this_timestamps.position_target_local_ned = current_messages.time_stamps.position_target_local_ned;
-                        break;
-                    }
+                    current_messages.time_stamps.global_position_int = get_time_usec();
+                    this_timestamps.global_position_int = current_messages.time_stamps.global_position_int;
+                    break;
+                }
 
-                    case MAVLINK_MSG_ID_POSITION_TARGET_GLOBAL_INT:
-                    {
-                        mavlink_msg_position_target_global_int_decode(&message, &(current_messages.position_target_global_int));
+                case MAVLINK_MSG_ID_POSITION_TARGET_LOCAL_NED:
+                {
+                    mavlink_msg_position_target_local_ned_decode(&message, &(current_messages.position_target_local_ned));
+                
+                    #ifdef DEBUG
+                        debug_print("\nMAVLINK_MSG_ID_POSITION_TARGET_LOCAL_NED current_messages.position_target_local_ned.x=%lf", current_messages.position_target_local_ned.x);
+                    #endif
+                    
+                    current_messages.time_stamps.position_target_local_ned = get_time_usec();
+                    this_timestamps.position_target_local_ned = current_messages.time_stamps.position_target_local_ned;
+                    break;
+                }
+
+                case MAVLINK_MSG_ID_POSITION_TARGET_GLOBAL_INT:
+                {
+                    mavlink_msg_position_target_global_int_decode(&message, &(current_messages.position_target_global_int));
+                    
+                    #ifdef DEBUG
+                        debug_print("\nMAVLINK_MSG_ID_POSITION_TARGET_GLOBAL_INT current_messages.position_target_global_int.vx=%lf", current_messages.position_target_global_int.vx);
+                    #endif
                         
-                        #ifdef DEBUG
-                            debug_print("\nMAVLINK_MSG_ID_POSITION_TARGET_GLOBAL_INT current_messages.position_target_global_int.vx=%lf", current_messages.position_target_global_int.vx);
-                        #endif
-                            
-                        current_messages.time_stamps.position_target_global_int = get_time_usec();
-                        this_timestamps.position_target_global_int = current_messages.time_stamps.position_target_global_int;
-                        break;
-                    }
+                    current_messages.time_stamps.position_target_global_int = get_time_usec();
+                    this_timestamps.position_target_global_int = current_messages.time_stamps.position_target_global_int;
+                    break;
+                }
 
-                    case MAVLINK_MSG_ID_HIGHRES_IMU:
-                    {
-                        #ifdef DEBUG
-                            debug_print("\nMAVLINK_MSG_ID_HIGHRES_IMU=%d", MAVLINK_MSG_ID_HIGHRES_IMU);
-                        #endif
-                        mavlink_msg_highres_imu_decode(&message, &(current_messages.highres_imu));
-                        current_messages.time_stamps.highres_imu = get_time_usec();
-                        this_timestamps.highres_imu = current_messages.time_stamps.highres_imu;
-                        break;
-                    }
+                case MAVLINK_MSG_ID_HIGHRES_IMU:
+                {
+                    #ifdef DEBUG
+                        debug_print("\nMAVLINK_MSG_ID_HIGHRES_IMU=%d", MAVLINK_MSG_ID_HIGHRES_IMU);
+                    #endif
+                    mavlink_msg_highres_imu_decode(&message, &(current_messages.highres_imu));
+                    current_messages.time_stamps.highres_imu = get_time_usec();
+                    this_timestamps.highres_imu = current_messages.time_stamps.highres_imu;
+                    break;
+                }
 
-                    case MAVLINK_MSG_ID_ATTITUDE:
-                    {
-                        #ifdef DEBUG
-                            debug_print("\nMAVLINK_MSG_ID_ATTITUDE=%d", MAVLINK_MSG_ID_ATTITUDE);
-                        #endif
-                        mavlink_msg_attitude_decode(&message, &(current_messages.attitude));
-                        current_messages.time_stamps.attitude = get_time_usec();
-                        this_timestamps.attitude = current_messages.time_stamps.attitude;
-                        break;
-                    }
+                case MAVLINK_MSG_ID_ATTITUDE:
+                {
+                    #ifdef DEBUG
+                        debug_print("\nMAVLINK_MSG_ID_ATTITUDE=%d", MAVLINK_MSG_ID_ATTITUDE);
+                    #endif
+                    mavlink_msg_attitude_decode(&message, &(current_messages.attitude));
+                    current_messages.time_stamps.attitude = get_time_usec();
+                    this_timestamps.attitude = current_messages.time_stamps.attitude;
+                    break;
+                }
 
-                    default:
-                    {
-                        #ifdef DEBUG
-                            debug_print("\nWarning, did not handle message id = %i",message.msgid);
-                        #endif
-                            
-                        break;
-                    }
+                default:
+                {
+                    #ifdef DEBUG
+                        debug_print("\nWarning, did not handle message id = %i",message.msgid);
+                    #endif
+                        
+                    break;
+                } 
 
-
-                } // end: switch msgid
-            }
-
-		} // end: if read message
-
-		// Check for receipt of all items
-		received_all =
+            } // end: switch msgid
+    
+            // Check for receipt of all items
+                received_all =
 				this_timestamps.heartbeat                  &&
 //				this_timestamps.battery_status             &&
 //				this_timestamps.radio_status               &&
@@ -428,6 +408,13 @@ void Autopilot_Interface::read_messages()
 //				this_timestamps.attitude                   &&
 				this_timestamps.sys_status
 				;
+                
+            //Forward Flight Controller received message to companion machine Client process
+            ColugoBrokerManager *oColugoBrokerManager = ColugoBrokerManager::GetInstance();
+            oColugoBrokerManager->DownlinkMessage(message) ;
+            
+		} // end: if read message
+
 
 		// give the write thread time to use the port
 		if ( writing_status > false ) {

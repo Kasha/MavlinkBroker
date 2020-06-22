@@ -1,7 +1,7 @@
 #ifndef COLUGO_COMPANION_COMPUTER
 #define COLUGO_COMPANION_COMPUTER
 
-#define CCC <ECC/ECC.h>
+#define CCC <CC/ECC.h>
 
 #include CCC
 

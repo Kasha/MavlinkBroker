@@ -385,13 +385,17 @@ main(int argc, char **argv)
 {
 try
 {
-    ColugoBrokerManager* oColugoBrokerManager = ColugoBrokerManager::GetInstance();
+    //ColugoBrokerManager* oColugoBrokerManager = ColugoBrokerManager::GetInstance();
     //debug_print("Main SomeBusinessLogic");
-    oColugoBrokerManager->SomeBusinessLogic() ;
+    //oColugoBrokerManager->Start() ;
 		//let it sink in
     
         //ColugoBrokerManager * colugoBrokerManagerST = ColugoBrokerManager::GetInstance("EEC");
         //singleton->
+    
+    ColugoBrokerManager::Start();
+    ColugoBrokerManager::Stop();
+
 		int result = top(argc,argv);
 		return result;
 	}

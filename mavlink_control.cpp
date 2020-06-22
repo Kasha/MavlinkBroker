@@ -251,7 +251,7 @@ commands(Autopilot_Interface &api, bool autotakeoff)
 
 	return;
 
-}
+} 
  
 // ------------------------------------------------------------------------------
 //   Parse Command Line
@@ -385,17 +385,8 @@ main(int argc, char **argv)
 {
 try
 {
-    //ColugoBrokerManager* oColugoBrokerManager = ColugoBrokerManager::GetInstance();
-    //debug_print("Main SomeBusinessLogic");
-    //oColugoBrokerManager->Start() ;
-		//let it sink in
-    
-        //ColugoBrokerManager * colugoBrokerManagerST = ColugoBrokerManager::GetInstance("EEC");
-        //singleton->
-    
     ColugoBrokerManager::Start();
     ColugoBrokerManager::Stop();
-
 		int result = top(argc,argv);
 		return result;
 	}

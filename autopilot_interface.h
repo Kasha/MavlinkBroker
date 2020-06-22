@@ -166,6 +166,7 @@ public:
 
     int system_id;
 	int autopilot_id;
+
 	int companion_id;
 
 	Mavlink_Messages current_messages;

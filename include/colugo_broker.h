@@ -3,6 +3,7 @@
 #include <utill.h>
 #include <sys/types.h>
 
+
 namespace ColugoBrokerModule
 {
   /**
@@ -19,6 +20,7 @@ class ColugoBrokerManager
      */
     
 protected:
+
     ColugoBrokerManager() ;
     ~ColugoBrokerManager() ;
     static ColugoBrokerManager* singleton_ ;
@@ -26,6 +28,7 @@ protected:
     LinkMessageBase* uplink_ = NULL;
     LinkMessageBase* downlink_ = NULL ;
     
+
 public:
 
     /**
@@ -36,9 +39,10 @@ public:
      * Singletons should not be assignable.
      */
     void operator=(const ColugoBrokerManager &) = delete;
+
     
     static void Delete(){ delete singleton_ ;} ;
-    //Attach
+
     /**
      * This is the static method that controls the access to the singleton
      * instance. On the first run, it creates a singleton object and places it
@@ -51,6 +55,7 @@ public:
      * @param other TODO
      * @return TODO
      */
+
     static ColugoBrokerManager *GetInstance(); 
     /**
      * Finally, any singleton should define some business logic, which can be
@@ -62,6 +67,7 @@ public:
      * @param other TODO
      * @return TODO
      */
+
       static bool Start() ;
       static bool Stop() ;
     /**
@@ -74,17 +80,14 @@ public:
     
     /**
      * @todo forward Mavlink message from companion computer according to filtered and predefined type to Flight controller
+
      *
      * @param other TODO
      * @return TODO
      */
+
     void UplinkMessage(mavlink_message_t& message) ;
- 
-    /*string value() const{
-        return value_;
-    } */
-  
-};
+ };
 }
 
 #endif // COLUGOBROKER_H

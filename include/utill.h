@@ -1,6 +1,6 @@
 #ifndef COLUGO_UTILL_H_
-#define COLUGO_UTILL_H_
-
+ #define COLUGO_UTILL_H_
+ 
 #include <generic_port.h>
 #include <signal.h>
 #include <time.h>
@@ -14,6 +14,35 @@
 #include <string>
 using namespace std ;
 
+#define DEBUG
+
+#ifdef DEBUG
+#define DEBUG_TEST 1
+#else
+#define DEBUG_TEST 0
+#endif
+
+
+#define debug_print(fmt, ...) \
+            do { if (DEBUG_TEST) fprintf(stderr, fmt, ## __VA_ARGS__); } while (0)
+                
+
+namespace ColugoBrokerModule
+{
+   class LinkMessageBase
+   {
+        public:
+            LinkMessageBase(){} ;
+            virtual ~LinkMessageBase() {};
+            
+            virtual bool Push(mavlink_message_t& message) = 0 ;
+            virtual mavlink_message_t& Pop () = 0 ;
+    } ;
+}
+
+ #include <colugo_broker.h>
+ using namespace ColugoBrokerModule ;
+ 
 #include <ardupilotmega/mavlink.h>
 // ------------------------------------------------------------------------------
 //   Data Structures
@@ -104,34 +133,8 @@ struct Mavlink_Messages {
 	}
 
 };
-
-#define DEBUG
-
-#ifdef DEBUG
-#define DEBUG_TEST 1
-#else
-#define DEBUG_TEST 0
 #endif
+                 
+ 
 
-
-#define debug_print(fmt, ...) \
-            do { if (DEBUG_TEST) fprintf(stderr, fmt, ## __VA_ARGS__); } while (0)
-                
-
-namespace ColugoBrokerModule
-{
-    class LinkMessageBase
-    {
-        public:
-            LinkMessageBase(){} ;
-            virtual ~LinkMessageBase() {};
-            
-            virtual bool Push(mavlink_message_t& message) = 0 ;
-            virtual mavlink_message_t& Pop () = 0 ;
-    } ;
-}
-
-#include <colugo_broker.h>
-using namespace ColugoBrokerModule ;
-
-#endif
+ 

@@ -61,4 +61,5 @@ bool ColugoBrokerManager::DownlinkMessage(mavlink_message_t& message)
 
 void ColugoBrokerManager::UplinkMessage(mavlink_message_t& message)
 {
+
 }

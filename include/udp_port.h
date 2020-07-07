@@ -102,39 +102,40 @@ class UDP_Port: public Generic_Port
 
 public:
 
-	UDP_Port();
-	UDP_Port(const char *target_ip_, int udp_port_);
-	virtual ~UDP_Port();
+    UDP_Port();
+    UDP_Port ( const char *target_ip_, int udp_port_ );
+    virtual ~UDP_Port();
 
-	int read_message(mavlink_message_t &message);
-	int write_message(const mavlink_message_t &message);
+    int read_message ( mavlink_message_t &message );
+    int write_message ( const mavlink_message_t &message );
 
-	bool is_running(){
-		return is_open;
-	}
-	void start();
-	void stop();
+    bool is_running()
+    {
+        return is_open;
+    }
+    void start();
+    void stop();
 
 private:
 
-	mavlink_status_t lastStatus;
-	pthread_mutex_t  lock;
+    mavlink_status_t lastStatus;
+    pthread_mutex_t  lock;
 
-	void initialize_defaults();
+    void initialize_defaults();
 
-	const static int BUFF_LEN=2041;
-	char buff[BUFF_LEN];
-	int buff_ptr;
-	int buff_len;
-	bool debug;
-	const char *target_ip;
-	int rx_port;
-	int tx_port;
-	int sock;
-	bool is_open;
+    const static int BUFF_LEN=2041;
+    char buff[BUFF_LEN];
+    int buff_ptr;
+    int buff_len;
+    bool debug;
+    const char *target_ip;
+    int rx_port;
+    int tx_port;
+    int sock;
+    bool is_open;
 
-	int  _read_port(uint8_t &cp);
-	int _write_port(char *buf, unsigned len);
+    int  _read_port ( uint8_t &cp );
+    int _write_port ( char *buf, unsigned len );
 
 };
 

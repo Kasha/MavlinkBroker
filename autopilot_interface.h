@@ -96,7 +96,7 @@
  *     MAVLINK_MSG_SET_POSITION_TARGET_LOCAL_NED_YAW_ANGLE;
  */
 
-                                                // bit number  876543210987654321
+// bit number  876543210987654321
 #define MAVLINK_MSG_SET_POSITION_TARGET_LOCAL_NED_POSITION     0b0000110111111000
 #define MAVLINK_MSG_SET_POSITION_TARGET_LOCAL_NED_VELOCITY     0b0000110111000111
 #define MAVLINK_MSG_SET_POSITION_TARGET_LOCAL_NED_ACCELERATION 0b0000110000111111
@@ -116,14 +116,14 @@
 
 // helper functions
 uint64_t get_time_usec();
-void set_position(float x, float y, float z, mavlink_set_position_target_local_ned_t &sp);
-void set_velocity(float vx, float vy, float vz, mavlink_set_position_target_local_ned_t &sp);
-void set_acceleration(float ax, float ay, float az, mavlink_set_position_target_local_ned_t &sp);
-void set_yaw(float yaw, mavlink_set_position_target_local_ned_t &sp);
-void set_yaw_rate(float yaw_rate, mavlink_set_position_target_local_ned_t &sp);
+void set_position ( float x, float y, float z, mavlink_set_position_target_local_ned_t &sp );
+void set_velocity ( float vx, float vy, float vz, mavlink_set_position_target_local_ned_t &sp );
+void set_acceleration ( float ax, float ay, float az, mavlink_set_position_target_local_ned_t &sp );
+void set_yaw ( float yaw, mavlink_set_position_target_local_ned_t &sp );
+void set_yaw_rate ( float yaw_rate, mavlink_set_position_target_local_ned_t &sp );
 
-void* start_autopilot_interface_read_thread(void *args);
-void* start_autopilot_interface_write_thread(void *args);
+void* start_autopilot_interface_read_thread ( void *args );
+void* start_autopilot_interface_write_thread ( void *args );
 
 
 // ------------------------------------------------------------------------------
@@ -155,66 +155,67 @@ class Autopilot_Interface
 
 public:
 
-	Autopilot_Interface();
-	Autopilot_Interface(Generic_Port *port_);
-	~Autopilot_Interface();
+    Autopilot_Interface();
+    Autopilot_Interface ( Generic_Port *port_ );
+    ~Autopilot_Interface();
 
-	char reading_status;
-	char writing_status;
-	char control_status;
+    char reading_status;
+    char writing_status;
+    char control_status;
     uint64_t write_count;
 
     int system_id;
-	int autopilot_id;
+    int autopilot_id;
 
-	int companion_id;
+    int companion_id;
 
-	Mavlink_Messages current_messages;
-	mavlink_set_position_target_local_ned_t initial_position;
+    Mavlink_Messages current_messages;
+    mavlink_set_position_target_local_ned_t initial_position;
 
-	void update_setpoint(mavlink_set_position_target_local_ned_t setpoint);
-	void read_messages();
-	int  write_message(mavlink_message_t message);
+    void update_setpoint ( mavlink_set_position_target_local_ned_t setpoint );
+    void read_messages();
+    int  write_message ( mavlink_message_t message );
 
-	int	 arm_disarm( bool flag );
-	void enable_offboard_control();
-	void disable_offboard_control();
+    int	 arm_disarm ( bool flag );
+    void enable_offboard_control();
+    void disable_offboard_control();
 
-	void start();
-	void stop();
+    void start();
+    void stop();
 
-	void start_read_thread();
-	void start_write_thread(void);
+    void start_read_thread();
+    void start_write_thread ( void );
 
-	void handle_quit( int sig );
+    void handle_quit ( int sig );
 
 
 private:
 
-	Generic_Port *port;
+    Generic_Port *port;
     //queue <string> m_olink
-   //UpperlinkData uplink_data ;
+    //UpperlinkData uplink_data ;
     //DownlinkData downlink_data ;
     //queue <shared_ptr<char>> uplink; //Listens to commands for Flight controller
-   // queue <shared_ptr<char>> downlink; //Sends commands from Flight controller to GCS or Companion Computer
-    
-	bool time_to_exit;
+    // queue <shared_ptr<char>> downlink; //Sends commands from Flight controller to GCS or Companion Computer
 
-	pthread_t read_tid;
-	pthread_t write_tid;
+    bool time_to_exit;
 
-	mavlink_set_position_target_local_ned_t current_setpoint;
+    pthread_t read_tid;
+    pthread_t write_tid;
 
-	void read_thread();
-	void write_thread(void);
+    mavlink_set_position_target_local_ned_t current_setpoint;
 
-	int toggle_offboard_control( bool flag );
-	void write_setpoint();
+    void read_thread();
+    void write_thread ( void );
+
+    int toggle_offboard_control ( bool flag );
+    void write_setpoint();
 
 };
 
 
 
 #endif // AUTOPILOT_INTERFACE_H_
+
 
 

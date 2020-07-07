@@ -1,9 +1,6 @@
-<<<<<<< Updated upstream
 [Buildset]
 BuildItems=@Variant(\x00\x00\x00\t\x00\x00\x00\x00\x01\x00\x00\x00\x0b\x00\x00\x00\x00\x01\x00\x00\x00\x18\x00C\x00o\x00l\x00u\x00g\x00o\x00B\x00r\x00o\x00k\x00e\x00r)
 
-=======
->>>>>>> Stashed changes
 [Cppcheck]
 checkConfig=true
 checkInformation=true
@@ -16,8 +13,17 @@ forceCheck=true
 inconclusiveAnalysis=true
 useSystemIncludes=true
 
+[CustomDefinesAndIncludes][ProjectPath0]
+Path=.
+parseAmbiguousAsCPP=true
+parserArguments=-ferror-limit=100 -fspell-checking -Wdocumentation -Wunused-parameter -Wunreachable-code -Wall -std=c++11
+parserArgumentsC=-ferror-limit=100 -fspell-checking -Wdocumentation -Wunused-parameter -Wunreachable-code -Wall -std=c99
+
+[CustomDefinesAndIncludes][ProjectPath0][Compiler]
+Name=GCC
+
 [Filters]
-size=33
+size=34
 
 [Filters][0]
 inclusive=0
@@ -154,6 +160,11 @@ inclusive=1
 pattern=/mavlink/include/mavlink/v2.0
 targets=3
 
+[Filters][33]
+inclusive=0
+pattern=/ColugoBroker
+targets=1
+
 [Filters][4]
 inclusive=0
 pattern=CVS
@@ -196,16 +207,30 @@ Type=Script Application
 [Launch][Launch Configuration 0][Data]
 Arguments=
 EnvironmentGroup=default
-Executable=file:///home/nvidia/Public/ColugoBroker/ColugoMavlink.rtf
+Executable= {$PWD}/ColugoMavlink.rtf
 Execute on Remote Host=false
 Interpreter=bash
 Output Filtering Mode=0
 Remote Host=
 Run current file=false
-Working Directory=file:///home/nvidia/Public/ColugoBroker
+Working Directory={$PWD}
+
+[MakeBuilder]
+Install As Root=true
 
 [Project]
 VersionControlSupport=kdevgit
 
 [SourceFileTemplates]
 LastUsedTemplate=/home/nvidia/.local/share/kdevfiletemplates/template_descriptions/cpp_basic.desktop
+
+[SourceFormatter]
+ModelinesEnabled=true
+OverrideKateIndentation=true
+UseDefault=false
+text/x-c++hdr=kdevastyle||1TBS
+text/x-c++src=kdevastyle||1TBS
+text/x-chdr=kdevastyle||1TBS
+text/x-csharp=kdevcustomscript||GNU_indent_GNU
+text/x-csrc=kdevastyle||1TBS
+text/x-java=kdevcustomscript||GNU_indent_GNU

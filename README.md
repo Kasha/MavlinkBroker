@@ -10,7 +10,7 @@ Building
 ========
 
 ```
-$ cd MavlinkBroker/
+$ cd ColugoBroker/
 $ make
 ```
 
@@ -44,7 +44,7 @@ The Pixhawk USB port will show up on a `ttyACM*`, an FTDI cable will show up on 
 Run the example executable on the host shell:
 
 ```
-$ cd MavlinkBroker/
+$ cd ColugoBroker/
 $ ./mavlink_control -d /dev/ttyTHS2
 ```
 

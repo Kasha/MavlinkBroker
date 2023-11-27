@@ -4,6 +4,7 @@
  *   Author: Trent Lukaczyk, <aerialhedgehog@gmail.com>
  *           Jaycee Lock,    <jaycee.lock@gmail.com>
  *           Lorenz Meier,   <lm@inf.ethz.ch>
+ *           Liad Kashanovsky <liadky@gmail.com>
  *
  * Redistribution and use in source and binary forms, with or without
  * modification, are permitted provided that the following conditions
@@ -37,14 +38,14 @@
 /**
  * @file mavlink_control.cpp
  *
- * @brief An example offboard control process via mavlink
+ * @companion app for communicating between companion apps running on  machines such as NVIDIA TX2 and Ardupilot/PX4
  *
- * This process connects an external MAVLink UART device to send an receive data
+ * This process connects an external MAVLink UART device to send and receive data with companion apps sensors data correction
  *
  * @author Trent Lukaczyk, <aerialhedgehog@gmail.com>
  * @author Jaycee Lock,    <jaycee.lock@gmail.com>
  * @author Lorenz Meier,   <lm@inf.ethz.ch>
- *
+ * @Liad Kashanovsky <liadky@gmail.com>
  */
 
 

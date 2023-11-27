@@ -13,5 +13,5 @@ git_submodule:
 	git submodule update --init --recursive
 
 clean:
-	 rm -rf *o ColugoBroker
+	 rm -rf *o MavlinkBroker
 

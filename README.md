@@ -9,7 +9,7 @@ Building
 ========
 
 ```
-$ cd ColugoBroker/
+$ cd MavlinkBroker/
 $ make
 ```
 
